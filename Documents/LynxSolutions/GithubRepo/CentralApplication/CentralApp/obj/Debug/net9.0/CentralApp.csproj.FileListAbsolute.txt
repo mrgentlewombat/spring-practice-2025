@@ -1,0 +1,14 @@
+/Users/razvanbuda/Documents/LynxSolutions/GithubRepo/CentralApplication/CentralApp/bin/Debug/net9.0/CentralApp
+/Users/razvanbuda/Documents/LynxSolutions/GithubRepo/CentralApplication/CentralApp/bin/Debug/net9.0/CentralApp.deps.json
+/Users/razvanbuda/Documents/LynxSolutions/GithubRepo/CentralApplication/CentralApp/bin/Debug/net9.0/CentralApp.runtimeconfig.json
+/Users/razvanbuda/Documents/LynxSolutions/GithubRepo/CentralApplication/CentralApp/bin/Debug/net9.0/CentralApp.dll
+/Users/razvanbuda/Documents/LynxSolutions/GithubRepo/CentralApplication/CentralApp/bin/Debug/net9.0/CentralApp.pdb
+/Users/razvanbuda/Documents/LynxSolutions/GithubRepo/CentralApplication/CentralApp/obj/Debug/net9.0/CentralApp.GeneratedMSBuildEditorConfig.editorconfig
+/Users/razvanbuda/Documents/LynxSolutions/GithubRepo/CentralApplication/CentralApp/obj/Debug/net9.0/CentralApp.AssemblyInfoInputs.cache
+/Users/razvanbuda/Documents/LynxSolutions/GithubRepo/CentralApplication/CentralApp/obj/Debug/net9.0/CentralApp.AssemblyInfo.cs
+/Users/razvanbuda/Documents/LynxSolutions/GithubRepo/CentralApplication/CentralApp/obj/Debug/net9.0/CentralApp.csproj.CoreCompileInputs.cache
+/Users/razvanbuda/Documents/LynxSolutions/GithubRepo/CentralApplication/CentralApp/obj/Debug/net9.0/CentralApp.dll
+/Users/razvanbuda/Documents/LynxSolutions/GithubRepo/CentralApplication/CentralApp/obj/Debug/net9.0/refint/CentralApp.dll
+/Users/razvanbuda/Documents/LynxSolutions/GithubRepo/CentralApplication/CentralApp/obj/Debug/net9.0/CentralApp.pdb
+/Users/razvanbuda/Documents/LynxSolutions/GithubRepo/CentralApplication/CentralApp/obj/Debug/net9.0/CentralApp.genruntimeconfig.cache
+/Users/razvanbuda/Documents/LynxSolutions/GithubRepo/CentralApplication/CentralApp/obj/Debug/net9.0/ref/CentralApp.dll
