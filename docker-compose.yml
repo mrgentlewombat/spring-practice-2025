@@ -1,0 +1,30 @@
+services:
+  central-app:
+    build:
+      context: ./CentralApp
+      dockerfile: Dockerfile
+    image: central-app:latest
+    container_name: central-app
+    volumes:
+      - ./test:/app/tests
+    networks:
+      - spring-net
+    environment:
+      - APP_UID=1000
+
+  worker-node-app:
+    build:
+      context: ./WorkerNodeApp
+      dockerfile: Dockerfile
+    image: worker-node-app:latest
+    container_name: worker-node-app
+    volumes:
+      - ./test:/app/tests
+    networks:
+      - spring-net
+    environment:
+      - APP_UID=1000
+
+networks:
+  spring-net:
+    driver: bridge
