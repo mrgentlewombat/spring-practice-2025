@@ -13,11 +13,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/razvanbuda/Documents/LynxSolutions/repositories/SpringPractice.NET/WorkerNodeApp/WorkerNodeApp.csproj",
+      "projectUniqueName": "/Users/razvanbuda/Documents/LynxSolutions/BigProject/spring-practice-2025/WorkerNodeApp/WorkerNodeApp.csproj",
       "projectName": "WorkerNodeApp",
-      "projectPath": "/Users/razvanbuda/Documents/LynxSolutions/repositories/SpringPractice.NET/WorkerNodeApp/WorkerNodeApp.csproj",
+      "projectPath": "/Users/razvanbuda/Documents/LynxSolutions/BigProject/spring-practice-2025/WorkerNodeApp/WorkerNodeApp.csproj",
       "packagesPath": "/Users/razvanbuda/.nuget/packages/",
-      "outputPath": "/Users/razvanbuda/Documents/LynxSolutions/repositories/SpringPractice.NET/WorkerNodeApp/obj/",
+      "outputPath": "/Users/razvanbuda/Documents/LynxSolutions/BigProject/spring-practice-2025/WorkerNodeApp/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/Users/razvanbuda/.nuget/NuGet/NuGet.Config"

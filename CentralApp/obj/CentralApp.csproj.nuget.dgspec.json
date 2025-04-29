@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/Users/razvanbuda/Documents/LynxSolutions/repositories/SpringPractice.NET/CentralApp/CentralApp.csproj": {}
+    "/Users/razvanbuda/Documents/LynxSolutions/BigProject/spring-practice-2025/CentralApp/CentralApp.csproj": {}
   },
   "projects": {
-    "/Users/razvanbuda/Documents/LynxSolutions/repositories/SpringPractice.NET/CentralApp/CentralApp.csproj": {
+    "/Users/razvanbuda/Documents/LynxSolutions/BigProject/spring-practice-2025/CentralApp/CentralApp.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/razvanbuda/Documents/LynxSolutions/repositories/SpringPractice.NET/CentralApp/CentralApp.csproj",
+        "projectUniqueName": "/Users/razvanbuda/Documents/LynxSolutions/BigProject/spring-practice-2025/CentralApp/CentralApp.csproj",
         "projectName": "CentralApp",
-        "projectPath": "/Users/razvanbuda/Documents/LynxSolutions/repositories/SpringPractice.NET/CentralApp/CentralApp.csproj",
+        "projectPath": "/Users/razvanbuda/Documents/LynxSolutions/BigProject/spring-practice-2025/CentralApp/CentralApp.csproj",
         "packagesPath": "/Users/razvanbuda/.nuget/packages/",
-        "outputPath": "/Users/razvanbuda/Documents/LynxSolutions/repositories/SpringPractice.NET/CentralApp/obj/",
+        "outputPath": "/Users/razvanbuda/Documents/LynxSolutions/BigProject/spring-practice-2025/CentralApp/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/Users/razvanbuda/.nuget/NuGet/NuGet.Config"
@@ -43,6 +43,30 @@
       "frameworks": {
         "net9.0": {
           "targetAlias": "net9.0",
+          "dependencies": {
+            "Microsoft.AspNetCore.Mvc": {
+              "target": "Package",
+              "version": "[2.3.0, )"
+            },
+            "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[9.0.4, )"
+            },
+            "Microsoft.EntityFrameworkCore.SqlServer": {
+              "target": "Package",
+              "version": "[9.0.4, )"
+            },
+            "Microsoft.EntityFrameworkCore.Tools": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[9.0.4, )"
+            },
+            "Pomelo.EntityFrameworkCore.MySql": {
+              "target": "Package",
+              "version": "[9.0.0-preview.3.efcore.9.0.0, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",
@@ -55,6 +79,9 @@
           "assetTargetFallback": true,
           "warn": true,
           "frameworkReferences": {
+            "Microsoft.AspNetCore.App": {
+              "privateAssets": "none"
+            },
             "Microsoft.NETCore.App": {
               "privateAssets": "all"
             }
