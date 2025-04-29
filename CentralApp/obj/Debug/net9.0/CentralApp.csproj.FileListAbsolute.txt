@@ -1,0 +1,6 @@
+C:\Users\maria\OneDrive\Desktop\Practica\SpringPractice.NET\CentralApp\obj\Debug\net9.0\CentralApp.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\maria\OneDrive\Desktop\Practica\SpringPractice.NET\CentralApp\obj\Debug\net9.0\CentralApp.AssemblyInfoInputs.cache
+C:\Users\maria\OneDrive\Desktop\Practica\SpringPractice.NET\CentralApp\obj\Debug\net9.0\CentralApp.AssemblyInfo.cs
+C:\Users\maria\OneDrive\Desktop\Practica\SpringPractice.NET\CentralApp\obj\Debug\net9.0\CentralApp.csproj.CoreCompileInputs.cache
+C:\Users\maria\OneDrive\Desktop\Practica\SpringPractice.NET\CentralApp\obj\Debug\net9.0\CentralApp.sourcelink.json
+C:\Users\maria\OneDrive\Desktop\Practica\SpringPractice.NET\CentralApp\obj\Debug\net9.0\CentralApp.csproj.AssemblyReference.cache

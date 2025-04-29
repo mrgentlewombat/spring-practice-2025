@@ -1,30 +1,11 @@
 {
   "version": 3,
   "targets": {
-    "net9.0": {
-      "Communication/1.0.0": {
-        "type": "project",
-        "framework": ".NETCoreApp,Version=v9.0",
-        "compile": {
-          "bin/placeholder/Communication.dll": {}
-        },
-        "runtime": {
-          "bin/placeholder/Communication.dll": {}
-        }
-      }
-    }
+    "net9.0": {}
   },
-  "libraries": {
-    "Communication/1.0.0": {
-      "type": "project",
-      "path": "../Communication/Communication.csproj",
-      "msbuildProject": "../Communication/Communication.csproj"
-    }
-  },
+  "libraries": {},
   "projectFileDependencyGroups": {
-    "net9.0": [
-      "Communication >= 1.0.0"
-    ]
+    "net9.0": []
   },
   "packageFolders": {
     "C:\\Users\\maria\\.nuget\\packages\\": {},
@@ -33,11 +14,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\maria\\OneDrive\\Desktop\\Practica\\SpringPractice.NET\\CentralApp\\CentralApp.csproj",
-      "projectName": "CentralApp",
-      "projectPath": "C:\\Users\\maria\\OneDrive\\Desktop\\Practica\\SpringPractice.NET\\CentralApp\\CentralApp.csproj",
+      "projectUniqueName": "C:\\Users\\maria\\OneDrive\\Desktop\\Practica\\SpringPractice.NET\\Communication\\Communication.csproj",
+      "projectName": "Communication",
+      "projectPath": "C:\\Users\\maria\\OneDrive\\Desktop\\Practica\\SpringPractice.NET\\Communication\\Communication.csproj",
       "packagesPath": "C:\\Users\\maria\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\maria\\OneDrive\\Desktop\\Practica\\SpringPractice.NET\\CentralApp\\obj\\",
+      "outputPath": "C:\\Users\\maria\\OneDrive\\Desktop\\Practica\\SpringPractice.NET\\Communication\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -58,11 +39,7 @@
       "frameworks": {
         "net9.0": {
           "targetAlias": "net9.0",
-          "projectReferences": {
-            "C:\\Users\\maria\\OneDrive\\Desktop\\Practica\\SpringPractice.NET\\Communication\\Communication.csproj": {
-              "projectPath": "C:\\Users\\maria\\OneDrive\\Desktop\\Practica\\SpringPractice.NET\\Communication\\Communication.csproj"
-            }
-          }
+          "projectReferences": {}
         }
       },
       "warningProperties": {
