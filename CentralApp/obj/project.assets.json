@@ -1,37 +1,68 @@
 {
   "version": 3,
   "targets": {
-    "net9.0": {}
+    "net9.0": {
+      "Communication/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v9.0",
+        "compile": {
+          "bin/placeholder/Communication.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Communication.dll": {}
+        }
+      }
+    }
   },
-  "libraries": {},
+  "libraries": {
+    "Communication/1.0.0": {
+      "type": "project",
+      "path": "../Communication/Communication.csproj",
+      "msbuildProject": "../Communication/Communication.csproj"
+    }
+  },
   "projectFileDependencyGroups": {
-    "net9.0": []
+    "net9.0": [
+      "Communication >= 1.0.0"
+    ]
   },
   "packageFolders": {
-    "/Users/razvanbuda/.nuget/packages/": {}
+    "C:\\Users\\maria\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/razvanbuda/Documents/LynxSolutions/repositories/SpringPractice.NET/CentralApp/CentralApp.csproj",
+      "projectUniqueName": "C:\\Users\\maria\\OneDrive\\Desktop\\Practica\\spring-practice-2025\\CentralApp\\CentralApp.csproj",
       "projectName": "CentralApp",
-      "projectPath": "/Users/razvanbuda/Documents/LynxSolutions/repositories/SpringPractice.NET/CentralApp/CentralApp.csproj",
-      "packagesPath": "/Users/razvanbuda/.nuget/packages/",
-      "outputPath": "/Users/razvanbuda/Documents/LynxSolutions/repositories/SpringPractice.NET/CentralApp/obj/",
+      "projectPath": "C:\\Users\\maria\\OneDrive\\Desktop\\Practica\\spring-practice-2025\\CentralApp\\CentralApp.csproj",
+      "packagesPath": "C:\\Users\\maria\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\maria\\OneDrive\\Desktop\\Practica\\spring-practice-2025\\CentralApp\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
       "configFilePaths": [
-        "/Users/razvanbuda/.nuget/NuGet/NuGet.Config"
+        "C:\\Users\\maria\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "net9.0"
       ],
       "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "net9.0": {
           "targetAlias": "net9.0",
-          "projectReferences": {}
+          "projectReferences": {
+            "C:\\Users\\maria\\OneDrive\\Desktop\\Practica\\spring-practice-2025\\Communication\\Communication.csproj": {
+              "projectPath": "C:\\Users\\maria\\OneDrive\\Desktop\\Practica\\spring-practice-2025\\Communication\\Communication.csproj"
+            }
+          }
         }
       },
       "warningProperties": {
@@ -65,7 +96,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/9.0.202/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.201/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
