@@ -11,6 +11,9 @@ services:
       - spring-net
     environment:
       - APP_UID=1000
+      - WORKER_NODE_URL=http://worker-node-app:8080  
+    depends_on:
+      - worker-node-app  
 
   worker-node-app:
     build:
