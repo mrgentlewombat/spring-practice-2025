@@ -2,6 +2,25 @@
   "version": 3,
   "targets": {
     "net9.0": {
+      "Microsoft.AspNetCore.OpenApi/9.0.4": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.OpenApi": "1.6.17"
+        },
+        "compile": {
+          "lib/net9.0/Microsoft.AspNetCore.OpenApi.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net9.0/Microsoft.AspNetCore.OpenApi.dll": {
+            "related": ".xml"
+          }
+        },
+        "frameworkReferences": [
+          "Microsoft.AspNetCore.App"
+        ]
+      },
       "Microsoft.Extensions.Configuration/9.0.4": {
         "type": "package",
         "dependencies": {
@@ -602,6 +621,19 @@
           "buildTransitive/net8.0/_._": {}
         }
       },
+      "Microsoft.OpenApi/1.6.17": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/Microsoft.OpenApi.dll": {
+            "related": ".pdb;.xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.0/Microsoft.OpenApi.dll": {
+            "related": ".pdb;.xml"
+          }
+        }
+      },
       "System.Diagnostics.EventLog/9.0.4": {
         "type": "package",
         "compile": {
@@ -643,10 +675,60 @@
         "runtime": {
           "bin/placeholder/Communication.dll": {}
         }
+      },
+      "Communication.DependencyInjection/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v9.0",
+        "dependencies": {
+          "Communication": "1.0.0",
+          "Microsoft.Extensions.DependencyInjection": "9.0.4",
+          "Microsoft.Extensions.Http": "9.0.4",
+          "Microsoft.Extensions.Logging": "9.0.4",
+          "WorkerNodeApp": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/Communication.DependencyInjection.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Communication.DependencyInjection.dll": {}
+        }
+      },
+      "WorkerNodeApp/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v9.0",
+        "dependencies": {
+          "Communication": "1.0.0",
+          "Microsoft.Extensions.DependencyInjection": "9.0.4",
+          "Microsoft.Extensions.Hosting": "9.0.4",
+          "Microsoft.Extensions.Http": "9.0.4",
+          "Microsoft.Extensions.Logging": "9.0.4"
+        },
+        "compile": {
+          "bin/placeholder/WorkerNodeApp.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/WorkerNodeApp.dll": {}
+        }
       }
     }
   },
   "libraries": {
+    "Microsoft.AspNetCore.OpenApi/9.0.4": {
+      "sha512": "GfZWPbZz1aAtEO3wGCkpeyRc0gzr/+VRHnUgY/YjqVPDlHbeKWCXw3IxKarQdo9myC2O1QBf652Mo50QqbXYRg==",
+      "type": "package",
+      "path": "microsoft.aspnetcore.openapi/9.0.4",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Icon.png",
+        "PACKAGE.md",
+        "THIRD-PARTY-NOTICES.TXT",
+        "lib/net9.0/Microsoft.AspNetCore.OpenApi.dll",
+        "lib/net9.0/Microsoft.AspNetCore.OpenApi.xml",
+        "microsoft.aspnetcore.openapi.9.0.4.nupkg.sha512",
+        "microsoft.aspnetcore.openapi.nuspec"
+      ]
+    },
     "Microsoft.Extensions.Configuration/9.0.4": {
       "sha512": "KIVBrMbItnCJDd1RF4KEaE8jZwDJcDUJW5zXpbwQ05HNYTK1GveHxHK0B3SjgDJuR48GRACXAO+BLhL8h34S7g==",
       "type": "package",
@@ -1513,6 +1595,21 @@
         "useSharedDesignerContext.txt"
       ]
     },
+    "Microsoft.OpenApi/1.6.17": {
+      "sha512": "Le+kehlmrlQfuDFUt1zZ2dVwrhFQtKREdKBo+rexOwaCoYP0/qpgT9tLxCsZjsgR5Itk1UKPcbgO+FyaNid/bA==",
+      "type": "package",
+      "path": "microsoft.openapi/1.6.17",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "README.md",
+        "lib/netstandard2.0/Microsoft.OpenApi.dll",
+        "lib/netstandard2.0/Microsoft.OpenApi.pdb",
+        "lib/netstandard2.0/Microsoft.OpenApi.xml",
+        "microsoft.openapi.1.6.17.nupkg.sha512",
+        "microsoft.openapi.nuspec"
+      ]
+    },
     "System.Diagnostics.EventLog/9.0.4": {
       "sha512": "getRQEXD8idlpb1KW56XuxImMy0FKp2WJPDf3Qr0kI/QKxxJSftqfDFVo0DZ3HCJRLU73qHSruv5q2l5O47jQQ==",
       "type": "package",
@@ -1551,11 +1648,23 @@
       "type": "project",
       "path": "../Communication/Communication.csproj",
       "msbuildProject": "../Communication/Communication.csproj"
+    },
+    "Communication.DependencyInjection/1.0.0": {
+      "type": "project",
+      "path": "../Communication.DependencyInjection/Communication.DependencyInjection.csproj",
+      "msbuildProject": "../Communication.DependencyInjection/Communication.DependencyInjection.csproj"
+    },
+    "WorkerNodeApp/1.0.0": {
+      "type": "project",
+      "path": "../WorkerNodeApp/WorkerNodeApp.csproj",
+      "msbuildProject": "../WorkerNodeApp/WorkerNodeApp.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net9.0": [
       "Communication >= 1.0.0",
+      "Communication.DependencyInjection >= 1.0.0",
+      "Microsoft.AspNetCore.OpenApi >= 9.0.4",
       "Microsoft.Extensions.DependencyInjection >= 9.0.4",
       "Microsoft.Extensions.Hosting >= 9.0.4",
       "Microsoft.Extensions.Http >= 9.0.4",
@@ -1595,6 +1704,9 @@
         "net9.0": {
           "targetAlias": "net9.0",
           "projectReferences": {
+            "C:\\Users\\maria\\OneDrive\\Desktop\\Practica\\spring-practice-2025\\Communication.DependencyInjection\\Communication.DependencyInjection.csproj": {
+              "projectPath": "C:\\Users\\maria\\OneDrive\\Desktop\\Practica\\spring-practice-2025\\Communication.DependencyInjection\\Communication.DependencyInjection.csproj"
+            },
             "C:\\Users\\maria\\OneDrive\\Desktop\\Practica\\spring-practice-2025\\Communication\\Communication.csproj": {
               "projectPath": "C:\\Users\\maria\\OneDrive\\Desktop\\Practica\\spring-practice-2025\\Communication\\Communication.csproj"
             }
@@ -1617,6 +1729,10 @@
       "net9.0": {
         "targetAlias": "net9.0",
         "dependencies": {
+          "Microsoft.AspNetCore.OpenApi": {
+            "target": "Package",
+            "version": "[9.0.4, )"
+          },
           "Microsoft.Extensions.DependencyInjection": {
             "target": "Package",
             "version": "[9.0.4, )"
@@ -1646,6 +1762,9 @@
         "assetTargetFallback": true,
         "warn": true,
         "frameworkReferences": {
+          "Microsoft.AspNetCore.App": {
+            "privateAssets": "none"
+          },
           "Microsoft.NETCore.App": {
             "privateAssets": "all"
           }
