@@ -1,3 +1,7 @@
+using CsvHelper;
+using CsvHelper.Configuration;
+using CsvHelper.TypeConversion;
+using System.Globalization;
 using System.Text.RegularExpressions;
 using WorkerNodeApp.Models;
 
@@ -8,63 +12,39 @@ public class CsvAgentReader
     public List<Agent> ReadAgents(string filePath)
     {
         var agents = new List<Agent>();
-        var lines = File.ReadAllLines(filePath);
 
-        if (lines.Length <= 1)
+        var config = new CsvConfiguration(CultureInfo.InvariantCulture)
         {
-            Errors.Add("The file is either empty or it doesn't contain any data");
-            return agents;
+            HasHeaderRecord = true,
+            IgnoreBlankLines = true,
+            TrimOptions = TrimOptions.Trim,
+            MissingFieldFound = null,
+            BadDataFound = context =>
+            {
+                Errors.Add($"[Line {context.RawRow}] Invalid data found: {context.RawRecord}");
+            }
+        };
+
+        using var reader = new StreamReader(filePath);
+        using var csv = new CsvReader(reader, config);
+        csv.Context.RegisterClassMap<AgentMap>();
+
+        try
+        {
+            foreach (var agent in csv.GetRecords<Agent>())
+            {
+                if (!IsValidEmail(agent.Contact))
+                {
+                    Errors.Add($"[Line {csv.Context.Parser.RawRow}] Invalid email: {agent.Contact}");
+                    continue;
+                }
+
+                agents.Add(agent);
+            }
         }
-
-        for (int i = 1; i < lines.Length; i++)
+        catch (Exception ex)
         {
-            var line = lines[i].Trim();
-            if (string.IsNullOrWhiteSpace(line))
-                continue;
-
-            var fields = line.Split(',');
-
-            if (fields.Length < 10)
-            {
-                Errors.Add("Invalid data. Not enough columns stored");
-                continue;
-            }
-
-            var name = fields[1].Trim();
-            var codeName = fields[2].Trim();
-            var location = fields[3].Trim();
-            var dobText = fields[4].Trim();
-            var contact = fields[5].Trim();
-            var lastMission = fields[6].Trim();
-            var status = fields[7].Trim();
-            var clearence = fields[8].Trim();
-            var note = fields[9].Trim();
-
-            if (!DateOnly.TryParse(dobText, out var dob))
-            {
-                Errors.Add($"[Line {i + 1}] Date of birth date is invalid: {dobText}");
-                continue;
-            }
-
-            if (!IsValidEmail(contact))
-            {
-                Errors.Add($"[Line {i + 1}] Contact (email) invalid: {contact}");
-                continue;
-            }
-
-            agents.Add(new Agent
-            {
-                AgentID = agentId,
-                Name = name,
-                CodeName = codeName,
-                Location = location,
-                DateOfBirth = dob,
-                Contact = contact,
-                LastMission = lastMission,
-                Status = status,
-                ClearenceLevel = clearence,
-                ArchiveNote = note
-            });
+            Errors.Add($"CSV parsing error: {ex.Message}");
         }
 
         return agents;
@@ -74,5 +54,32 @@ public class CsvAgentReader
     {
         var pattern = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
         return Regex.IsMatch(email, pattern);
+    }
+}
+
+public sealed class AgentMap : ClassMap<Agent>
+{
+    public AgentMap()
+    {
+        Map(m => m.AgentID).Index(0);
+        Map(m => m.Name).Index(1);
+        Map(m => m.CodeName).Index(2);
+        Map(m => m.Location).Index(3);
+        Map(m => m.DateOfBirth).Index(4).TypeConverter(new DateOnlyConverter());
+        Map(m => m.Contact).Index(5);
+        Map(m => m.LastMission).Index(6);
+        Map(m => m.Status).Index(7);
+        Map(m => m.ClearenceLevel).Index(8);
+        Map(m => m.ArchiveNote).Index(9);
+    }
+}
+
+public class DateOnlyConverter : DefaultTypeConverter
+{
+    public override object ConvertFromString(string? text, IReaderRow row, MemberMapData memberMapData)
+    {
+        if (DateOnly.TryParse(text, out var date))
+            return date;
+        throw new TypeConverterException(this, memberMapData, text, row.Context, $"Invalid date format: {text}");
     }
 }

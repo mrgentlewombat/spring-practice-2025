@@ -1,8 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "ocsUA7Q+MkQ=",
+  "dgSpecHash": "yMcuI8WdQXQ=",
   "success": true,
-  "projectFilePath": "/Users/razvanbuda/Documents/LynxSolutions/repositories/SpringPractice.NET/WorkerNodeApp/WorkerNodeApp.csproj",
-  "expectedPackageFiles": [],
+  "projectFilePath": "C:\\faculta\\Practica\\GitRepo\\spring-practice-2025\\WorkerNodeApp\\WorkerNodeApp.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\apopi\\.nuget\\packages\\csvhelper\\33.0.1\\csvhelper.33.0.1.nupkg.sha512"
+  ],
   "logs": []
 }
