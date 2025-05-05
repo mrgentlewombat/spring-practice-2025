@@ -3,18 +3,18 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// 1. Adaugă servicii AICI — înainte de builder.Build()
+// Add controller support (for API endpoints)
 builder.Services.AddControllers();
+
+// Register the database context and configure MySQL connection
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseMySql(
         builder.Configuration.GetConnectionString("DefaultConnection"),
-        new MySqlServerVersion(new Version(8, 0, 36)) // înlocuiește cu versiunea ta MySQL dacă e diferită
+        new MySqlServerVersion(new Version(8, 0, 36)) 
     ));
 
-// 2. Acum construiește aplicația
 var app = builder.Build();
 
-// 3. Configurează pipeline-ul
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
