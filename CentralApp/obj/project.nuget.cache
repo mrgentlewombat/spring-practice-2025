@@ -1,6 +1,10 @@
 {
   "version": 2,
+<<<<<<< Updated upstream
   "dgSpecHash": "SYXdV7SDuyI=",
+=======
+  "dgSpecHash": "iZB7QEbICmw=",
+>>>>>>> Stashed changes
   "success": true,
   "projectFilePath": "C:\\faculta\\Practica\\GitRepo\\spring-practice-2025\\CentralApp\\CentralApp.csproj",
   "expectedPackageFiles": [],

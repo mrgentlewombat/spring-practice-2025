@@ -83,7 +83,15 @@
       "frameworks": {
         "net9.0": {
           "targetAlias": "net9.0",
+<<<<<<< Updated upstream
           "projectReferences": {}
+=======
+          "projectReferences": {
+            "C:\\faculta\\Practica\\GitRepo\\spring-practice-2025\\Communication\\Communication.csproj": {
+              "projectPath": "C:\\faculta\\Practica\\GitRepo\\spring-practice-2025\\Communication\\Communication.csproj"
+            }
+          }
+>>>>>>> Stashed changes
         }
       },
       "warningProperties": {

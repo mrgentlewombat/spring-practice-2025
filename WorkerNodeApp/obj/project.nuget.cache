@@ -1,10 +1,17 @@
 {
   "version": 2,
+<<<<<<< Updated upstream
   "dgSpecHash": "yMcuI8WdQXQ=",
   "success": true,
   "projectFilePath": "C:\\faculta\\Practica\\GitRepo\\spring-practice-2025\\WorkerNodeApp\\WorkerNodeApp.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\apopi\\.nuget\\packages\\csvhelper\\33.0.1\\csvhelper.33.0.1.nupkg.sha512"
   ],
+=======
+  "dgSpecHash": "4T1VE3cg4Ao=",
+  "success": true,
+  "projectFilePath": "C:\\faculta\\Practica\\GitRepo\\spring-practice-2025\\WorkerNodeApp\\WorkerNodeApp.csproj",
+  "expectedPackageFiles": [],
+>>>>>>> Stashed changes
   "logs": []
 }
