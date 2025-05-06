@@ -114,8 +114,6 @@ Thumbs.db
 *.msm
 *.msp
 
-# JetBrains Rider
-.idea/
-
-# IntelliJ IDEA
-.idea/
+!**/[Bb]in/*/
+!**/[Oo]bj/*/
+!**/packages/*/
