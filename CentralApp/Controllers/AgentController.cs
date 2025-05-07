@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using CentralApp.Data;
+using Domain;
 
 namespace CentralApp.Controllers
 {
