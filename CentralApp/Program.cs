@@ -3,6 +3,16 @@ using System.Threading.Tasks;
 using Communication.Contracts;
 using Communication.Models;
 using Communication.Services;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using CentralApp.Data;    
+using Microsoft.EntityFrameworkCore;
+using CentralApp.Models;
+
+
+
+
 
 namespace CentralApp
 {
@@ -12,8 +22,25 @@ namespace CentralApp
     
     class Program
     {
-        static async Task Main(string[] args)
-        {
+            static async Task Main(string[] args)
+            {
+
+            var configuration = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .Build();
+
+            var serviceProvider = new ServiceCollection()
+                .AddSingleton<IConfiguration>(configuration)
+                .AddDbContext<AppDbContext>(options =>
+                    options.UseMySql(
+                        configuration.GetConnectionString("DefaultConnection"),
+                        new MySqlServerVersion(new Version(8, 0, 36))))
+                .AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>))
+                .BuildServiceProvider();
+
+            var regionRepo = serviceProvider.GetRequiredService<IGenericRepository<Region>>();
+
             Console.WriteLine("CentralApp - Starting...");
             
             
@@ -29,6 +56,8 @@ namespace CentralApp
             Console.WriteLine("3 - Stop work");
             Console.WriteLine("4 - Get status");
             Console.WriteLine("5 - Exit");
+
+    
             
             // main command loop
             bool running = true;
