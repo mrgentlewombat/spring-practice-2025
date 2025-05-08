@@ -1,8 +1,8 @@
 services:
   central-app:
     build:
-      context: ./CentralApp
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: CentralApp/Dockerfile
     image: central-app:latest
     container_name: central-app
     volumes:
@@ -11,14 +11,14 @@ services:
       - spring-net
     environment:
       - APP_UID=1000
-      - WORKER_NODE_URL=http://worker-node-app:8080  
+      - WORKER_NODE_URL=http://worker-node-app:8080
     depends_on:
-      - worker-node-app  
+      - worker-node-app
 
   worker-node-app:
     build:
-      context: ./WorkerNodeApp
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: WorkerNodeApp/Dockerfile
     image: worker-node-app:latest
     container_name: worker-node-app
     volumes:

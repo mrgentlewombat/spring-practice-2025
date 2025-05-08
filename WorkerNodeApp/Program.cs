@@ -1,4 +1,3 @@
-<<<<<<< Updated upstream
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -59,17 +58,3 @@ namespace WorkerNodeApp
         }
     }
 }
-=======
-﻿var builder = WebApplication.CreateBuilder(args);
-var app = builder.Build();
-
-app.MapGet("/health", () => "OK");
-app.MapGet("/status", () => "Idle");
-app.MapPost("/work", () =>
-{
-    Console.WriteLine("WorkerNodeApp: Doing work...");
-    return Results.Ok("Work started");
-});
-
-app.Run("http://0.0.0.0:8080");
->>>>>>> Stashed changes
