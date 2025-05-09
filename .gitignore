@@ -97,7 +97,7 @@ wwwroot/
 
 # Log files
 *.log
-
+    
 # User-specific directories
 .vs2019/
 .vs2017/
@@ -117,3 +117,4 @@ Thumbs.db
 !**/[Bb]in/*/
 !**/[Oo]bj/*/
 !**/packages/*/
+CentralApp/obj/CentralApp.csproj.nuget.dgspec.json
