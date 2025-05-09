@@ -15,6 +15,22 @@ services:
     depends_on:
       - worker-node-app
 
+  db:
+    image: mysql:8.0
+    container_name: centralapp-db
+    restart: always
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: centralapp_db
+      MYSQL_USER: appuser
+      MYSQL_PASSWORD: secret123
+      MYSQL_ROOT_PASSWORD: rootpass
+    volumes:
+      - dbdata:/var/lib/mysql
+    networks:
+      - spring-net
+
   worker-node-app:
     build:
       context: .
@@ -31,3 +47,6 @@ services:
 networks:
   spring-net:
     driver: bridge
+
+volumes:
+  dbdata:
