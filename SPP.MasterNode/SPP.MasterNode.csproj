@@ -2,7 +2,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Communication\Communication.csproj" />
-    <ProjectReference Include="..\Domain\Domain.csproj" />
+    <ProjectReference Include="..\Libraries\SPP.Domain\SPP.Domain.csproj" />
   </ItemGroup>
 
   <PropertyGroup>
