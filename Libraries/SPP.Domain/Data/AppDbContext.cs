@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
-using CentralApp.Models;
 
-namespace CentralApp.Data
-{
+
+namespace Domain;
+
         // Database context used to access tables in the database
     public class AppDbContext : DbContext
     {
@@ -14,4 +14,4 @@ namespace CentralApp.Data
         // Table for regions (used to validate region codes)
         public DbSet<Region> Regions { get; set; }
     }
-}
+
