@@ -5,6 +5,8 @@ using Microsoft.Extensions.Hosting;
 using Communication.Services;
 using Communication.Models;
 
+using Communication.Contracts;
+
 public class WorkerScheduler : BackgroundService
 {
     private readonly ICommunication _communication;

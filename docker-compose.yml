@@ -1,8 +1,27 @@
+version: "3.8"
+
 services:
+  mysql:
+    image: mysql:8.0
+    container_name: spp_mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: spp_masternode
+      MYSQL_USER: spp_user
+      MYSQL_PASSWORD: spp_password
+    ports:
+      - "3307:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./DeployDb.sql:/docker-entrypoint-initdb.d/DeployDb.sql
+    networks:
+      - spring-net
+
   central-app:
     build:
       context: .
-      dockerfile: CentralApp/Dockerfile
+      dockerfile: SPP.MasterNode/Dockerfile
     image: central-app:latest
     container_name: central-app
     volumes:
@@ -14,6 +33,7 @@ services:
       - WORKER_NODE_URL=http://worker-node-app:8080
     depends_on:
       - worker-node-app
+      - mysql
 
   db:
     image: mysql:8.0
@@ -34,7 +54,7 @@ services:
   worker-node-app:
     build:
       context: .
-      dockerfile: WorkerNodeApp/Dockerfile
+      dockerfile: SPP.WorkerNode/Dockerfile
     image: worker-node-app:latest
     container_name: worker-node-app
     volumes:
@@ -43,6 +63,9 @@ services:
       - spring-net
     environment:
       - APP_UID=1000
+
+volumes:
+  db_data:
 
 networks:
   spring-net:

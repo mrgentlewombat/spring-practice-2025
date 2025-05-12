@@ -1,27 +1,25 @@
-using CentralApp.Data;
+using Domain;                            // AppDbContext
+using Communication.Contracts;           // ICommunication
 using Microsoft.EntityFrameworkCore;
-using Communication.Services;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add controller support (for API endpoints)
 builder.Services.AddControllers();
 
-// Register the database context and configure MySQL connection
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseMySql(
         builder.Configuration.GetConnectionString("DefaultConnection"),
         new MySqlServerVersion(new Version(8, 0, 36))
     ));
 
-// Register communication service
-builder.Services.AddSingleton<ICommunication, Communication>();
+// Evităm ambiguitatea: specificăm complet calea către clasa Communication
+builder.Services.AddSingleton<ICommunication, Communication.Services.Communication>();
 
-// Register WorkerScheduler as a background service
 builder.Services.AddHostedService<WorkerScheduler>();
 
-// Configure worker node URL from environment variable
 var workerNodeUrl = Environment.GetEnvironmentVariable("WORKER_NODE_URL") ?? "http://localhost:8080";
 builder.Services.AddSingleton(workerNodeUrl);
 
