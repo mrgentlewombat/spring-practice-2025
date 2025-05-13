@@ -7,14 +7,14 @@ namespace SPP.MasterNode.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class WorkerRegistrationController : ControllerBase
+    public class WorkerNodeController : ControllerBase
     {
         private readonly WorkerRegistryService _workerRegistry;
-        private readonly ILogger<WorkerRegistrationController> _logger;
+        private readonly ILogger<WorkerNodeController> _logger;
 
-        public WorkerRegistrationController(
+        public WorkerNodeController(
             WorkerRegistryService workerRegistry,
-            ILogger<WorkerRegistrationController> logger)
+            ILogger<WorkerNodeController> logger)
         {
             _workerRegistry = workerRegistry;
             _logger = logger;
@@ -65,6 +65,29 @@ namespace SPP.MasterNode.Controllers
             }
             return Ok(worker);
         }
+
+
+
+        [HttpPost("processing-completed")]
+        public IActionResult ProcessingCompleted([FromBody] string message)
+        {
+            Console.WriteLine($"[Worker] Processing of the file completed: {message}");
+            return Ok("Received");
+        }
+
+        [HttpPost("statistics")]
+        public IActionResult ReceiveStatistics([FromBody] WorkerStatistics stats){
+            Console.WriteLine($"[Worker] Processed: {stats.TotalAgentsProcessed}, Errors: {stats.ErrorsCount}, Time: {stats.ProcessingTime}");
+            return Ok("Statistics received");
+        }
+
+        [HttpPost("info")]
+        public IActionResult ReceiveInfo([FromBody] WorkerNode info)
+        {
+            Console.WriteLine($"[Worker] Info processed: {info.Id}, {info.Url}, {info.LastHeartbeat}, {info.Status}, {info.RegisteredAt}");
+            return Ok("info received");
+        }
+
     }
 
     public class WorkerRegistrationRequest
