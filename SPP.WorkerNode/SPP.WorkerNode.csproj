@@ -2,6 +2,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Communication\Communication.csproj" />
+    <ProjectReference Include="..\Libraries\SPP.Communication\SPP.Communication.csproj" />
   </ItemGroup>
 
   <PropertyGroup>
