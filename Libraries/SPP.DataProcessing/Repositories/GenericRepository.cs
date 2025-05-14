@@ -1,4 +1,4 @@
-using CentralApp.Data;
+using SPP.DataProcessing.Data;
 using Microsoft.EntityFrameworkCore;
 
 public class GenericRepository<T> : IGenericRepository<T> where T : class

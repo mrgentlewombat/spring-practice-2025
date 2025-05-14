@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
-    <ProjectReference Include="..\Communication\Communication.csproj" />
+    <ProjectReference Include="..\SPP.Communication\SPP.Communication.csproj" />
   </ItemGroup>
 
   <ItemGroup>

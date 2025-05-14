@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using CentralApp.Models;
+using SPP.DataProcessing.Models;
 
-namespace CentralApp.Data
+namespace SPP.DataProcessing.Data
 {
     public class AppDbContext : DbContext
     {

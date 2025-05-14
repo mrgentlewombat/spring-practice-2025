@@ -1,4 +1,4 @@
-﻿namespace SPP.Communication.Tests;
+﻿namespace SPP.DataProcessing.Tests;
 
 [TestClass]
 public sealed class Test1

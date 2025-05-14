@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 
-namespace Communication.Contracts
+namespace SPP.Communication.Contracts
 {
    
     /// interface that defines the communication contract between CentralApp and WorkerNodeApp

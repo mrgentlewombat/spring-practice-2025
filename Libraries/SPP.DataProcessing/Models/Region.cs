@@ -1,4 +1,4 @@
-namespace CentralApp.Models
+namespace SPP.DataProcessing.Models
 {
     public class Region
     {
