@@ -1,8 +1,8 @@
 using System.Threading.Tasks;
-using Communication.Contracts;
+using SPP.Communication.Contracts;
 using Communication.Http;
 
-namespace Communication.Services
+namespace SPP.Communication.Services
 {
    
     /// implementation of the ICommunication interface

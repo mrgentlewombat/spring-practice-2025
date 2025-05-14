@@ -1,4 +1,4 @@
-namespace Communication.Models
+namespace SPP.Communication.Models
 {
     
     /// represents a command request sent from CentralApp to WorkerNodeApp

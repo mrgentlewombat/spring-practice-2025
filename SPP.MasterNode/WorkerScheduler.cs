@@ -2,10 +2,10 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
-using Communication.Services;
-using Communication.Models;
+using SPP.Communication.Services;
+using SPP.Communication.Models;
 
-using Communication.Contracts;
+using SPP.Communication.Contracts;
 
 public class WorkerScheduler : BackgroundService
 {

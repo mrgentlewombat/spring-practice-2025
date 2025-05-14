@@ -4,7 +4,7 @@ using System.Net;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
-using Communication.Models;
+using SPP.Communication.Models;
 using WorkerNodeApp.Services;
 
 namespace WorkerNodeApp.Communication
