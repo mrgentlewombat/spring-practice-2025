@@ -14,8 +14,6 @@ namespace Communication.Models
     {
         public bool Success { get; set; }
         public string Status { get; set; }
-        public object Result { get; set; }
-        public double Progress { get; set; }
         [JsonPropertyName("id")]
         public string CommandId { get; set; }
     }
