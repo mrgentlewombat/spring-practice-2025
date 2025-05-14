@@ -135,12 +135,10 @@ namespace WorkerNodeApp.Communication
                 }
 
                 var commandResult = command.Type.ToLower() switch
-                {
-                    "status" => new UnifiedCommandResponse
+                {                    "status" => new UnifiedCommandResponse
                     {
                         Success = true,
                         Status = _processor.GetStatus().Status,
-                        Progress = _processor.GetStatus().Progress,
                         CommandId = command.CommandId
                     },
                     _ => await HandleProcessorCommand(command)
@@ -155,13 +153,11 @@ namespace WorkerNodeApp.Communication
         }
 
         private async Task<UnifiedCommandResponse> HandleProcessorCommand(UnifiedCommand command)
-        {
-            var result = await _processor.ProcessCommandAsync(command.Type, command.Payload);
+        {            var result = await _processor.ProcessCommandAsync(command.Type, command.Payload);
             return new UnifiedCommandResponse
             {
                 Success = result.Success,
                 Status = result.Message,
-                Result = result.Result,
                 CommandId = command.CommandId
             };
         }
