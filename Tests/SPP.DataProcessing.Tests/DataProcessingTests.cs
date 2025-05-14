@@ -1,4 +1,4 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using SPP.DataProcessing.Data;
 using SPP.DataProcessing.Models;
 using Moq;
@@ -49,36 +49,35 @@ namespace SPP.DataProcessing.Tests
             Assert.AreEqual("Eagle", agent.CodeName);
         }
 
-        [TestMethod]
-        public async Task GenericRepository_GetAllAsync_ShouldReturnEntities()
-        {
-            // Arrange
-            var mockSet = new Mock<DbSet<Region>>();
-            var testData = new List<Region>
-            {
-                new Region { Id = 1, RegionCode = "EUR", RegionName = "Europe" },
-                new Region { Id = 2, RegionCode = "NAM", RegionName = "North America" }
-            };
-            
-            // Setup the mock to return our test data
-            mockSet.As<IQueryable<Region>>().Setup(m => m.Provider).Returns(testData.AsQueryable().Provider);
-            mockSet.As<IQueryable<Region>>().Setup(m => m.Expression).Returns(testData.AsQueryable().Expression);
-            mockSet.As<IQueryable<Region>>().Setup(m => m.ElementType).Returns(testData.AsQueryable().ElementType);
-            mockSet.As<IQueryable<Region>>().Setup(m => m.GetEnumerator()).Returns(testData.GetEnumerator());
-            
-            var mockContext = new Mock<AppDbContext>(new DbContextOptions<AppDbContext>());
-            mockContext.Setup(c => c.Set<Region>()).Returns(mockSet.Object);
-            
-            var repository = new GenericRepository<Region>(mockContext.Object);
-            
-            // Act
-            var result = await repository.GetAllAsync();
-            
-            // Assert
-            Assert.AreEqual(2, result.Count());
-            Assert.IsTrue(result.Any(r => r.RegionCode == "EUR"));
-            Assert.IsTrue(result.Any(r => r.RegionCode == "NAM"));
-        }
+       [TestMethod]
+public async Task GenericRepository_GetAllAsync_ShouldReturnEntities()
+{
+    // Arrange - Setup in-memory database
+    var options = new DbContextOptionsBuilder<AppDbContext>()
+        .UseInMemoryDatabase(databaseName: "TestDb_GetAll")
+        .Options;
+
+    // Add test data
+    using (var context = new AppDbContext(options))
+    {
+        context.Regions.Add(new Region { Id = 1, RegionCode = "EUR", RegionName = "Europe" });
+        context.Regions.Add(new Region { Id = 2, RegionCode = "NAM", RegionName = "North America" });
+        await context.SaveChangesAsync();
+    }
+
+    // Act
+    using (var context = new AppDbContext(options))
+    {
+        var repository = new GenericRepository<Region>(context);
+        var regions = await repository.GetAllAsync();
+
+        // Assert
+        Assert.IsNotNull(regions);
+        Assert.AreEqual(2, regions.Count());
+        Assert.IsTrue(regions.Any(r => r.RegionCode == "EUR"));
+        Assert.IsTrue(regions.Any(r => r.RegionCode == "NAM"));
+    }
+}
 
         [TestMethod]
         public async Task GenericRepository_GetByIdAsync_ShouldFindEntity()
