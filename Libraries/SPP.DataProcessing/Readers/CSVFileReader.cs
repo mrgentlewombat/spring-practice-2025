@@ -5,6 +5,8 @@ using System.Globalization;
 using System.Text.RegularExpressions;
 using WorkerNodeApp.Models;
 
+namespace SPP.DataProcessing.Readers;
+
 public class CsvAgentReader
 {
     public List<string> Errors { get; } = new();
