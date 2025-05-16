@@ -1,4 +1,4 @@
-
+namespace SPP.DataProcessing.Models;
 public class Agent
 {
     public int AgentID { get; set; }

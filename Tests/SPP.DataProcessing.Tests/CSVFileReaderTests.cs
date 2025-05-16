@@ -5,8 +5,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using SPP.DataProcessing.Models;
+using SPP.DataProcessing.Readers;
 
-namespace CSVFileReader.Tests
+namespace SPP.DataProcessing.Tests
 {
     [TestClass]
     public class CSVFileReaderTests
