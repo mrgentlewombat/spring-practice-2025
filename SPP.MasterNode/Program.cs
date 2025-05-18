@@ -15,7 +15,6 @@ builder.Services.AddDbContext<AppDbContext>(options =>
         new MySqlServerVersion(new Version(8, 0, 36))
     ));
 
-// Evităm ambiguitatea: specificăm complet calea către clasa Communication
 builder.Services.AddSingleton<ICommunication, Communication.Services.Communication>();
 
 builder.Services.AddHostedService<WorkerScheduler>();
