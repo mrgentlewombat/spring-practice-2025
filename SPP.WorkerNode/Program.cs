@@ -14,21 +14,26 @@ namespace WorkerNodeApp
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Worker Node - Starting...");
-
-            try
+            Console.WriteLine("Worker Node - Starting...");            try
             {
-                // Get configuration from command line args or use defaults
-                string ipAddress = "127.0.0.1";
-                int port = args.Length > 0 ? int.Parse(args[0]) : 5001;
+                var builder = WebApplication.CreateBuilder(args);
+                builder.Logging.ClearProviders();
+                builder.Logging.AddConsole();
+
+                // Get configuration from environment or use defaults
+                var baseUrl = Environment.GetEnvironmentVariable("WORKER_BASE_URL") ?? "localhost";
+                var port = int.TryParse(Environment.GetEnvironmentVariable("WORKER_PORT"), out var p) ? p : 5001;
                 
-                Console.WriteLine($"Worker Node listening on: http://{ipAddress}:{port}/");
+                builder.Services.AddSingleton<CommandProcessor>();
+                var app = builder.Build();
                 
-                // Create command processor to handle incoming commands
-                var commandProcessor = new CommandProcessor();
+                var logger = app.Services.GetRequiredService<ILogger<CommandListener>>();
+                var processor = app.Services.GetRequiredService<CommandProcessor>();
+
+                Console.WriteLine($"Worker Node listening on: http://{baseUrl}:{port}/api/");
                 
-                // Create and start the HTTP listener
-                using var commandListener = new CommandListener(ipAddress, port, commandProcessor);
+                // Create and start the HTTP listener with dependency injection
+                using var commandListener = new CommandListener(baseUrl, port, processor, logger);
                 commandListener.Start();
                 
                 Console.WriteLine("Worker Node is running and actively listening for commands.");
