@@ -1,5 +1,6 @@
-using Domain;                            // AppDbContext
-using SPP.Communication.Contracts;           // ICommunication
+using SPP.Domain.Data;
+using SPP.Communication.Services;
+using SPP.Communication.Contracts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.DependencyInjection;

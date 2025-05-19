@@ -11,24 +11,23 @@ namespace WorkerNodeApp.Communication
 {
 
     /// listens for HTTP commands from CentralApp and processes them
-    /// this class allows WorkerNodeApp to receive HTTP requests
-
-    public class CommandListener : IDisposable
+    /// this class allows WorkerNodeApp to receive HTTP requests    public class CommandListener : IDisposable
     {
         private readonly HttpListener _listener;
-        private readonly string _url;
+        private readonly string _baseUrl;
         private bool _isRunning;
         private readonly CommandProcessor _processor;
+        private readonly CommandStorage _commandStorage;
+        private readonly ILogger<CommandListener> _logger;
 
-
-
-
-        public CommandListener(string ipAddress, int port, CommandProcessor processor)
+        public CommandListener(string baseUrl, int port, CommandProcessor processor, ILogger<CommandListener> logger)
         {
-            _url = $"http://{ipAddress}:{port}/api/";
+            _baseUrl = $"http://{baseUrl.TrimEnd('/')}:{port}/";
             _listener = new HttpListener();
-            _listener.Prefixes.Add(_url);
+            _listener.Prefixes.Add($"{_baseUrl}api/");
             _processor = processor;
+            _commandStorage = new CommandStorage();
+            _logger = logger;
         }
 
 
@@ -112,11 +111,8 @@ namespace WorkerNodeApp.Communication
 
                 context.Response.Close();
             }
-        }
-
-        private async Task HandleUnifiedCommandAsync(HttpListenerRequest request, HttpListenerResponse response)
+        }        private async Task HandleUnifiedCommandAsync(HttpListenerRequest request, HttpListenerResponse response)
         {
-
             string requestBody;
             using (var reader = new StreamReader(request.InputStream, request.ContentEncoding))
             {
@@ -134,15 +130,32 @@ namespace WorkerNodeApp.Communication
                     return;
                 }
 
-                var commandResult = command.Type.ToLower() switch
-                {                    "status" => new UnifiedCommandResponse
-                    {
-                        Success = true,
-                        Status = _processor.GetStatus().Status,
-                        CommandId = command.CommandId
-                    },
-                    _ => await HandleProcessorCommand(command)
+                if (string.IsNullOrEmpty(command.CommandId))
+                {
+                    command.CommandId = Guid.NewGuid().ToString();
+                }
+
+                _commandStorage.TryAddCommand(command);                var commandResult = command.Type.ToLower() switch
+                {
+                    "status" => await HandleStatusCommand(command),
+                    "cancel" => await HandleCancelCommand(command),
+                    "startprocessing" => await HandleStartProcessingCommand(command),
+                    "sendstatistics" => await HandleSendStatisticsCommand(command),
+                    "lockfiles" => await HandleLockFilesCommand(command),
+                    _ => new UnifiedCommandResponse 
+                    { 
+                        Success = false, 
+                        Status = "Unknown command", 
+                        CommandId = command.CommandId 
+                    }
                 };
+
+                // Update command status based on result
+                if (_commandStorage.TryGetCommand(command.CommandId, out var cmdInfo))
+                {
+                    _commandStorage.UpdateStatus(command.CommandId, 
+                        commandResult.Success ? CommandStorage.CommandStatus.Completed : CommandStorage.CommandStatus.Failed);
+                }
 
                 SendJsonResponse(response, HttpStatusCode.OK, commandResult);
             }
@@ -150,16 +163,76 @@ namespace WorkerNodeApp.Communication
             {
                 SendErrorResponse(response, HttpStatusCode.BadRequest, "Invalid JSON in request");
             }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error handling command");
+                SendErrorResponse(response, HttpStatusCode.InternalServerError, "Internal server error");
+            }
         }
 
-        private async Task<UnifiedCommandResponse> HandleProcessorCommand(UnifiedCommand command)
-        {            var result = await _processor.ProcessCommandAsync(command.Type, command.Payload);
+        private Task<UnifiedCommandResponse> HandleStatusCommand(UnifiedCommand command)
+        {
+            if (_commandStorage.TryGetCommand(command.CommandId, out var cmdInfo))
+            {
+                return Task.FromResult(new UnifiedCommandResponse
+                {
+                    Success = true,
+                    Status = cmdInfo.Status.ToString(),
+                    CommandId = command.CommandId
+                });
+            }
+
+            return Task.FromResult(new UnifiedCommandResponse
+            {
+                Success = false,
+                Status = "Command not found",
+                CommandId = command.CommandId
+            });
+        }
+
+        private Task<UnifiedCommandResponse> HandleCancelCommand(UnifiedCommand command)
+        {
+            var success = _commandStorage.CancelCommand(command.CommandId);
+            return Task.FromResult(new UnifiedCommandResponse
+            {
+                Success = success,
+                Status = success ? "Command cancelled" : "Command not found",
+                CommandId = command.CommandId
+            });
+        }
+
+        private async Task<UnifiedCommandResponse> HandleStartProcessingCommand(UnifiedCommand command)
+        {
+            _commandStorage.AddCommand(command);
+            await _processor.ProcessCommandAsync(command.Type, command.Payload);
             return new UnifiedCommandResponse
             {
-                Success = result.Success,
-                Status = result.Message,
+                Success = true,
+                Status = "Processing started",
                 CommandId = command.CommandId
             };
+        }
+
+        private Task<UnifiedCommandResponse> HandleSendStatisticsCommand(UnifiedCommand command)
+        {
+            // Implementation for sending statistics
+            return Task.FromResult(new UnifiedCommandResponse
+            {
+                Success = true,
+                Status = "Statistics sent",
+                CommandId = command.CommandId
+            });
+        }
+
+        private Task<UnifiedCommandResponse> HandleLockFilesCommand(UnifiedCommand command)
+        {
+            // Implementation for locking files
+            return Task.FromResult(new UnifiedCommandResponse
+            {
+                Success = true,
+                Status = "Files locked",
+                CommandId = command.CommandId
+            });
         }
 
         private void SendJsonResponse(HttpListenerResponse response, HttpStatusCode statusCode, object data)

@@ -2,7 +2,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Libraries\SPP.Communication\SPP.Communication.csproj" />
-    <ProjectReference Include="..\Libraries\SPP.Domain\SPP.Domain.csproj" />
+    <ProjectReference Include="..\Libraries\SPP.Domain\SPP.Domain.csproj"/>
+    <ProjectReference Include="..\Libraries\SPP.DataProcessing\SPP.DataProcessing.csproj"/>
   </ItemGroup>
 
   <PropertyGroup>

@@ -1,4 +1,4 @@
-namespace Domain;
+namespace SPP.Domain.Repositories;
 
 
 public interface IRepository<T> where T : class

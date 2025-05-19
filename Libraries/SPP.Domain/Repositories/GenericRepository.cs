@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
+using SPP.Domain.Data;
 
-namespace Domain;
+namespace SPP.Domain.Repositories;
+
 
 public class GenericRepository<T> : IRepository<T> where T : class
 {
