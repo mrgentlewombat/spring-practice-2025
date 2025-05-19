@@ -1,10 +1,15 @@
 using System;
+using System.Collections.Generic;
+using Communication.Models;
+
 
 namespace SPP.MasterNode.Services.CommandRegistry
 {
     public interface ICommandRegistry
     {
-        void Register(string commandName, ICommand command);
-        ICommand? GetCommand(string commandName);
+        void Add(Command command);
+        Command? Get(Guid id);
+        IEnumerable<Command> GetAllByStatus(string status);
+        void Update(Command updatedCommand);
     }
 }

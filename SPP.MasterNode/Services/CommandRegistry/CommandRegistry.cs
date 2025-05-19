@@ -1,38 +1,42 @@
 using System;
 using System.Collections.Generic;
+using Communication.Models;
 
 namespace SPP.MasterNode.Services.CommandRegistry
 {
     public class CommandRegistry : ICommandRegistry
     {
-        private readonly Dictionary<string, ICommand> _commands = new();
-        private readonly Dictionary<Guid, string> _statuses = new();
+        private readonly Dictionary<Guid, Command> _commands = new();
 
-        public void Register(string commandName, ICommand command)
+        // Add a new command to the registry
+        public void Add(Command command)
         {
-            _commands[commandName] = command;
+            _commands[command.ID] = command;
         }
 
-        public ICommand? GetCommand(string commandName)
+        // Retrieve a command by its ID
+        public Command? Get(Guid id)
         {
-            return _commands.TryGetValue(commandName, out var command) ? command : null;
+            return _commands.TryGetValue(id, out var command) ? command : null;
         }
 
-        public void SetCompleted(Guid commandId)
+        // Get all commands with a specific status
+        public IEnumerable<Command> GetAllByStatus(string status)
         {
-            _statuses[commandId] = "Completed";
-            Console.WriteLine($"Command {commandId} marked as Completed.");
+            foreach (var command in _commands.Values)
+            {
+                if (command.Status == status)
+                    yield return command;
+            }
         }
 
-        public void SetFailed(Guid commandId, string reason)
+        // Update an existing command
+        public void Update(Command updatedCommand)
         {
-            _statuses[commandId] = $"Failed: {reason}";
-            Console.WriteLine($"Command {commandId} marked as Failed. Reason: {reason}");
-        }
-
-        public string? GetStatus(Guid commandId)
-        {
-            return _statuses.TryGetValue(commandId, out var status) ? status : null;
+            if (_commands.ContainsKey(updatedCommand.ID))
+            {
+                _commands[updatedCommand.ID] = updatedCommand;
+            }
         }
     }
 }

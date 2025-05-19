@@ -9,9 +9,11 @@ using WorkerNodeApp.Services;
 
 namespace WorkerNodeApp.Communication
 {
-
-    /// listens for HTTP commands from CentralApp and processes them
-    /// this class allows WorkerNodeApp to receive HTTP requests    public class CommandListener : IDisposable
+    /// <summary>
+    /// Listens for HTTP commands from CentralApp and processes them.
+    /// This class allows WorkerNodeApp to receive HTTP requests.
+    /// </summary>
+    public class CommandListener : IDisposable
     {
         private readonly HttpListener _listener;
         private readonly string _baseUrl;
@@ -30,21 +32,20 @@ namespace WorkerNodeApp.Communication
             _logger = logger;
         }
 
-
-        /// starts listening for incoming commands
+        /// <summary>Starts listening for incoming commands</summary>
         public void Start()
         {
             if (_isRunning) return;
 
             _listener.Start();
             _isRunning = true;
-            Console.WriteLine($"Command listener started on {_url}");
+            Console.WriteLine($"Command listener started on {_baseUrl}");
 
-            // start listening for requests in a background task
+            // Start listening for requests in a background task
             Task.Run(ProcessRequestsAsync);
         }
 
-        /// stops listening for commands
+        /// <summary>Stops listening for commands</summary>
         public void Stop()
         {
             _isRunning = false;
@@ -52,23 +53,18 @@ namespace WorkerNodeApp.Communication
             Console.WriteLine("Command listener stopped");
         }
 
-
-        /// main loop for processing incoming HTTP requests
+        /// <summary>Main loop for processing incoming HTTP requests</summary>
         private async Task ProcessRequestsAsync()
         {
             while (_isRunning)
             {
                 try
                 {
-
                     var context = await _listener.GetContextAsync();
-
-                    // process the request in another task to keep the listener responsive
                     _ = Task.Run(() => HandleRequestAsync(context));
                 }
                 catch (HttpListenerException)
                 {
-
                     break;
                 }
                 catch (Exception ex)
@@ -81,16 +77,13 @@ namespace WorkerNodeApp.Communication
             }
         }
 
-
-        /// handles an individual HTTP request by routing it to the appropriate handler
+        /// <summary>Handles an individual HTTP request by routing it to the appropriate handler</summary>
         private async Task HandleRequestAsync(HttpListenerContext context)
         {
             try
             {
                 var request = context.Request;
                 var response = context.Response;
-
-
                 response.ContentType = "application/json";
 
                 if (request.HttpMethod != "POST")
@@ -108,10 +101,11 @@ namespace WorkerNodeApp.Communication
             }
             finally
             {
-
                 context.Response.Close();
             }
-        }        private async Task HandleUnifiedCommandAsync(HttpListenerRequest request, HttpListenerResponse response)
+        }
+
+        private async Task HandleUnifiedCommandAsync(HttpListenerRequest request, HttpListenerResponse response)
         {
             string requestBody;
             using (var reader = new StreamReader(request.InputStream, request.ContentEncoding))
@@ -135,25 +129,26 @@ namespace WorkerNodeApp.Communication
                     command.CommandId = Guid.NewGuid().ToString();
                 }
 
-                _commandStorage.TryAddCommand(command);                var commandResult = command.Type.ToLower() switch
+                _commandStorage.AddCommand(command);
+
+                var commandResult = command.Type.ToLower() switch
                 {
                     "status" => await HandleStatusCommand(command),
                     "cancel" => await HandleCancelCommand(command),
                     "startprocessing" => await HandleStartProcessingCommand(command),
                     "sendstatistics" => await HandleSendStatisticsCommand(command),
                     "lockfiles" => await HandleLockFilesCommand(command),
-                    _ => new UnifiedCommandResponse 
-                    { 
-                        Success = false, 
-                        Status = "Unknown command", 
-                        CommandId = command.CommandId 
+                    _ => new UnifiedCommandResponse
+                    {
+                        Success = false,
+                        Status = "Unknown command",
+                        CommandId = command.CommandId
                     }
                 };
 
-                // Update command status based on result
                 if (_commandStorage.TryGetCommand(command.CommandId, out var cmdInfo))
                 {
-                    _commandStorage.UpdateStatus(command.CommandId, 
+                    _commandStorage.UpdateStatus(command.CommandId,
                         commandResult.Success ? CommandStorage.CommandStatus.Completed : CommandStorage.CommandStatus.Failed);
                 }
 
@@ -215,7 +210,6 @@ namespace WorkerNodeApp.Communication
 
         private Task<UnifiedCommandResponse> HandleSendStatisticsCommand(UnifiedCommand command)
         {
-            // Implementation for sending statistics
             return Task.FromResult(new UnifiedCommandResponse
             {
                 Success = true,
@@ -226,7 +220,6 @@ namespace WorkerNodeApp.Communication
 
         private Task<UnifiedCommandResponse> HandleLockFilesCommand(UnifiedCommand command)
         {
-            // Implementation for locking files
             return Task.FromResult(new UnifiedCommandResponse
             {
                 Success = true,
@@ -239,32 +232,26 @@ namespace WorkerNodeApp.Communication
         {
             response.StatusCode = (int)statusCode;
 
-
             var json = JsonSerializer.Serialize(data,
                 new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
             var buffer = Encoding.UTF8.GetBytes(json);
-
 
             response.ContentLength64 = buffer.Length;
             response.OutputStream.Write(buffer, 0, buffer.Length);
         }
 
-
-        /// sends an error response with the specified status code and message
         private void SendErrorResponse(HttpListenerResponse response, HttpStatusCode statusCode, string message)
         {
             response.StatusCode = (int)statusCode;
-
 
             var error = new { error = true, message };
             var json = JsonSerializer.Serialize(error);
             var buffer = Encoding.UTF8.GetBytes(json);
 
-
             response.ContentLength64 = buffer.Length;
             response.OutputStream.Write(buffer, 0, buffer.Length);
         }
-        /// disposes resources used by the listener
+
         public void Dispose()
         {
             Stop();
