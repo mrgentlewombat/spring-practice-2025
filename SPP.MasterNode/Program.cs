@@ -1,5 +1,6 @@
-using Domain;                            // AppDbContext
-using Communication.Contracts;           // ICommunication
+using SPP.Domain.Data;
+using SPP.Communication.Services;
+using SPP.Communication.Contracts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,7 +17,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     ));
 
 // Evităm ambiguitatea: specificăm complet calea către clasa Communication
-builder.Services.AddSingleton<ICommunication, Communication.Services.Communication>();
+builder.Services.AddSingleton<ICommunication, SPP.Communication.Services.Communication>();
 
 builder.Services.AddHostedService<WorkerScheduler>();
 

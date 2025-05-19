@@ -1,7 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <ItemGroup>
-    <ProjectReference Include="..\Communication\Communication.csproj" />
+    <ProjectReference Include="..\Libraries\SPP.Communication\SPP.Communication.csproj" />
+    <ProjectReference Include="..\Libraries\SPP.Domain\SPP.Domain.csproj"/>
+    <ProjectReference Include="..\Libraries\SPP.DataProcessing\SPP.DataProcessing.csproj"/>
   </ItemGroup>
 
   <PropertyGroup>
