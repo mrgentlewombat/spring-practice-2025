@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using SPP.Communication.Models;
 using SPP.WorkerNode.Services;
 
-namespace SPP.WorkerNodeApp.Communication
 namespace SPP.WorkerNode.Communication
 {
     /// <summary>
