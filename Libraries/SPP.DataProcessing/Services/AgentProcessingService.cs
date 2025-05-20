@@ -1,4 +1,5 @@
 using System;
+using SPP.DataProcessing.Models;
 using SPP.Domain.Entities;
 using SPP.Domain.Repositories;
 

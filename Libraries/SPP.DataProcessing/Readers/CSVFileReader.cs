@@ -3,7 +3,7 @@ using CsvHelper.Configuration;
 using CsvHelper.TypeConversion;
 using System.Globalization;
 using System.Text.RegularExpressions;
-using WorkerNodeApp.Models;
+using SPP.DataProcessing.Models;
 
 namespace SPP.DataProcessing.Readers;
 
@@ -23,7 +23,7 @@ public class CsvAgentReader
             MissingFieldFound = null,
             BadDataFound = context =>
             {
-                Errors.Add($"[Line {context.RawRow}] Invalid data found: {context.RawRecord}");
+                Errors.Add($"[Line {context.Context.Parser.RawRow}] Invalid data found: {context.RawRecord}");
             }
         };
 

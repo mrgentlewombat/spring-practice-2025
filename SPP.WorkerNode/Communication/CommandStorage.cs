@@ -1,5 +1,5 @@
 using System.Collections.Concurrent;
-using Communication.Models;
+using SPP.Communication.Models;
 
 namespace WorkerNodeApp.Communication
 {
