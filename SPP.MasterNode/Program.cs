@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
+using SPP.Domain.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +16,9 @@ builder.Services.AddDbContext<AppDbContext>(options =>
         builder.Configuration.GetConnectionString("DefaultConnection"),
         new MySqlServerVersion(new Version(8, 0, 36))
     ));
+
+// Register generic repository
+builder.Services.AddScoped(typeof(IRepository<>), typeof(GenericRepository<>));
 
 // Evităm ambiguitatea: specificăm complet calea către clasa Communication
 builder.Services.AddSingleton<ICommunication, SPP.Communication.Services.Communication>();

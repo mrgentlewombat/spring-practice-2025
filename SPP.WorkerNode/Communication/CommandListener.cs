@@ -5,15 +5,14 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using SPP.Communication.Models;
-using WorkerNodeApp.Services;
+using SPP.WorkerNode.Services;
 
-
-namespace WorkerNodeApp.Communication
+namespace SPP.WorkerNode.Communication
 {
 
     /// listens for HTTP commands from CentralApp and processes them
-    /// this class allows WorkerNodeApp to receive HTTP requests  
-      public class CommandListener : IDisposable
+    /// this class allows WorkerNodeApp to receive HTTP requests    
+    public class CommandListener : IDisposable
     {
         private readonly HttpListener _listener;
         private readonly string _baseUrl;
