@@ -1,7 +1,7 @@
 using System.Collections.Concurrent;
 using Communication.Models;
 
-namespace WorkerNodeApp.Communication
+namespace SPP.WorkerNodeApp.Communication
 {
     public class CommandStorage
     {

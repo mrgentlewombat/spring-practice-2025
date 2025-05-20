@@ -1,6 +1,6 @@
 using System;
 
-namespace Communication.Models
+namespace SPP.Communication.Models
 {
     public class Command
     {

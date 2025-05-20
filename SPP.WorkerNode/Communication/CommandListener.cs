@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Communication.Models;
 using WorkerNodeApp.Services;
 
-namespace WorkerNodeApp.Communication
+namespace SPP.WorkerNodeApp.Communication
 {
     /// <summary>
     /// Listens for HTTP commands from CentralApp and processes them.

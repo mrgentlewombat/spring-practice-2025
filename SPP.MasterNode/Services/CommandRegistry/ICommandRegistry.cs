@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Communication.Models;
+using SPP.Communication.Models;
 
 
 namespace SPP.MasterNode.Services.CommandRegistry

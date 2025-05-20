@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using WorkerNodeApp.Communication;
+using SPP.WorkerNodeApp.Communication;
 using WorkerNodeApp.Services;
 
 namespace WorkerNodeApp
