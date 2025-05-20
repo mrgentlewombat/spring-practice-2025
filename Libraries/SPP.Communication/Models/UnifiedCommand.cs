@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace Communication.Models
+namespace SPP.Communication.Models
 {
     public class UnifiedCommand
     {
