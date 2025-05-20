@@ -4,11 +4,11 @@ using System.Net;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
-using Communication.Models;
-using WorkerNodeApp.Services;
-using Microsoft.Extensions.Logging;
+using SPP.Communication.Models;
+using SPP.WorkerNode.Services;
 
 namespace SPP.WorkerNodeApp.Communication
+namespace SPP.WorkerNode.Communication
 {
     /// <summary>
     /// Listens for HTTP commands from CentralApp and processes them.
@@ -39,6 +39,7 @@ namespace SPP.WorkerNodeApp.Communication
 
             _listener.Start();
             _isRunning = true;
+            Console.WriteLine($"Command listener started on {_baseUrl}");
             Console.WriteLine($"Command listener started on {_baseUrl}");
 
             Task.Run(ProcessRequestsAsync);

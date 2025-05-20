@@ -2,10 +2,11 @@
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading;
-using SPP.WorkerNodeApp.Communication;
-using WorkerNodeApp.Services;
+using System.Threading.Tasks;
+using SPP.WorkerNode.Communication;
+using SPP.WorkerNode.Services;
 
-namespace WorkerNodeApp
+namespace SPP.WorkerNode
 {
     class Program
     {

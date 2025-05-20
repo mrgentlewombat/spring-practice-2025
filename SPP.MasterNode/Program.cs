@@ -1,10 +1,12 @@
-using Domain;                            // AppDbContext
-using Communication.Contracts;           // ICommunication interface
+using SPP.Domain.Data;
+using SPP.Communication.Services;
+using SPP.Communication.Contracts; interface
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using SPP.MasterNode.Services;           // WorkerRegistryService for managing registered workers
+using SPP.Domain.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,8 +23,11 @@ builder.Services.AddDbContext<AppDbContext>(options =>
         new MySqlServerVersion(new Version(8, 0, 36))
     ));
 
+// Register generic repository
+builder.Services.AddScoped(typeof(IRepository<>), typeof(GenericRepository<>));
+
 // Register the communication layer for HTTP requests to workers
-builder.Services.AddSingleton<ICommunication, Communication.Services.Communication>();
+builder.Services.AddSingleton<ICommunication, SPP.Communication.Services.Communication>();
 
 // Register background service that periodically sends commands to worker nodes
 builder.Services.AddHostedService<WorkerScheduler>();

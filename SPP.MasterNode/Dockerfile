@@ -7,8 +7,8 @@ ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 
 COPY SPP.MasterNode/SPP.MasterNode.csproj SPP.MasterNode/
-COPY Libraries/SPP.Domain/SPP.Domain.csproj Libraries/SPP.Domain/
-COPY Communication/Communication.csproj Communication/
+COPY ["Libraries/SPP.Domain/SPP.Domain.csproj", "Libraries/SPP.Domain/"]
+COPY ["Libraries/SPP.Communication/SPP.Communication.csproj", "Libraries/SPP.Communication/"]
 
 RUN dotnet restore SPP.MasterNode/SPP.MasterNode.csproj
 

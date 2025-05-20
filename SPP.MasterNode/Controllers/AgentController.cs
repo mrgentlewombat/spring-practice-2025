@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Domain;
+using SPP.Domain.Data;
+using SPP.Domain.Entities;
+using SPP.Domain.Repositories;
 
 namespace CentralApp.Controllers
 {
@@ -9,11 +11,25 @@ namespace CentralApp.Controllers
     public class AgentController : ControllerBase
     {
         private readonly AppDbContext _context;
+        private readonly IRepository<AgentEntity> _agentRepository;
 
-        // Inject the database context
-        public AgentController(AppDbContext context)
+        // Inject the database context and agent repository
+        public AgentController(AppDbContext context, IRepository<AgentEntity> agentRepository)
         {
             _context = context;
+            _agentRepository = agentRepository;
+        }
+
+        // GET: api/agent/{id}
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(int id)
+        {
+            var agent = await _agentRepository.GetByIdAsync(id);
+            if (agent == null)
+            {
+                return NotFound($"Agent with ID {id} not found");
+            }
+            return Ok(agent);
         }
         
 

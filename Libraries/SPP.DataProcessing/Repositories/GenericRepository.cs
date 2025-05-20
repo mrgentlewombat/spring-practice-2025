@@ -1,10 +1,7 @@
+using SPP.DataProcessing.Data;
 using Microsoft.EntityFrameworkCore;
-using SPP.Domain.Data;
 
-namespace SPP.Domain.Repositories;
-
-
-public class GenericRepository<T> : IRepository<T> where T : class
+public class GenericRepository<T> : IGenericRepository<T> where T : class
 {
     private readonly AppDbContext _context;
     private readonly DbSet<T> _dbSet;

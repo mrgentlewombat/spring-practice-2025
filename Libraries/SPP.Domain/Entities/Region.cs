@@ -1,5 +1,5 @@
 
-namespace Domain;
+namespace SPP.Domain.Entities;
 
     public class Region
     {

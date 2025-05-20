@@ -2,11 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Communication.Models;
+using SPP.Communication.Models;
 
-namespace WorkerNodeApp.Services
+namespace SPP.WorkerNode.Services
 {
-   
+
     /// processes commands received from the CentralApp
     /// handles different command types and maintains state information
     public class CommandProcessor
@@ -17,12 +17,17 @@ namespace WorkerNodeApp.Services
         private CancellationTokenSource _workCancellationSource;
         private readonly DateTime _startTime;
 
-       
+        public List<string> GetRegisteredCommands()
+        {
+            return new List<string>(_commandHandlers.Keys);
+        }
+
+
         /// initializes a new instance of the CommandProcessor
         public CommandProcessor()
         {
             _startTime = DateTime.Now;
-            
+
             // register command handlers for different command types
             _commandHandlers = new Dictionary<string, Func<object, Task<string>>>(StringComparer.OrdinalIgnoreCase)
             {
@@ -33,7 +38,7 @@ namespace WorkerNodeApp.Services
             };
         }
 
-      
+
         /// processes a command and returns the result>
         public async Task<CommandResponse> ProcessCommandAsync(string command, object data)
         {
@@ -51,7 +56,7 @@ namespace WorkerNodeApp.Services
             {
                 try
                 {
-                    
+
                     var result = await handler(data);
                     return new CommandResponse
                     {
@@ -71,7 +76,7 @@ namespace WorkerNodeApp.Services
             }
             else
             {
-                
+
                 return new CommandResponse
                 {
                     Success = false,
@@ -80,7 +85,7 @@ namespace WorkerNodeApp.Services
             }
         }
 
-        
+
         /// gets the current status of the worker node
         public StatusResponse GetStatus()
         {
@@ -93,7 +98,7 @@ namespace WorkerNodeApp.Services
             };
         }
 
-       
+
         /// handler for the "start" command, begins a work operation
         private Task<string> StartWorkHandler(object data)
         {
@@ -104,18 +109,18 @@ namespace WorkerNodeApp.Services
 
             _workCancellationSource?.Cancel();
             _workCancellationSource = new CancellationTokenSource();
-            
-        
+
+
             var token = _workCancellationSource.Token;
             _ = Task.Run(() => DoWork(data, token), token);
-            
+
             _currentStatus = "Working";
             _progress = 0;
-            
+
             return Task.FromResult($"Work started with data: {data}");
         }
 
-        
+
         /// handler for the "stop" command, stops the current work operation
         private Task<string> StopWorkHandler(object data)
         {
@@ -126,18 +131,18 @@ namespace WorkerNodeApp.Services
 
             _workCancellationSource?.Cancel();
             _currentStatus = "Idle";
-            
+
             return Task.FromResult("Work stopped successfully.");
         }
 
-       
+
         /// handler for the "ping" command, simple connectivity test
         private Task<string> PingHandler(object data)
         {
             return Task.FromResult($"Pong! Time: {DateTime.Now}, Uptime: {(DateTime.Now - _startTime).TotalSeconds} seconds");
         }
 
-       //just for test
+        //just for test
         private Task<string> HelloHandler(object data)
         {
             string name = data?.ToString() ?? "there";
@@ -154,7 +159,7 @@ namespace WorkerNodeApp.Services
             try
             {
                 Console.WriteLine($"Starting work with data: {data}");
-                
+
                 // Simulate progress in 5% increments
                 for (int i = 0; i <= 100; i += 5)
                 {
@@ -163,14 +168,14 @@ namespace WorkerNodeApp.Services
                         Console.WriteLine("Work cancelled");
                         return;
                     }
-                    
+
                     _progress = i;
                     Console.WriteLine($"Work progress: {i}%");
-                    
+
                     // Delay to simulate actual work
                     await Task.Delay(500, cancellationToken);
                 }
-                
+
                 // Work completed
                 _currentStatus = "Idle";
                 Console.WriteLine("Work completed successfully");
@@ -185,5 +190,6 @@ namespace WorkerNodeApp.Services
                 _currentStatus = "Error";
             }
         }
+        
     }
 }
