@@ -6,6 +6,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using Communication.Models;
 using WorkerNodeApp.Services;
+using Microsoft.Extensions.Logging;
 
 namespace SPP.WorkerNodeApp.Communication
 {
@@ -27,12 +28,11 @@ namespace SPP.WorkerNodeApp.Communication
             _baseUrl = $"http://{baseUrl.TrimEnd('/')}:{port}/";
             _listener = new HttpListener();
             _listener.Prefixes.Add($"{_baseUrl}api/");
-            _processor = processor;
+            _processor = processor ?? throw new ArgumentNullException(nameof(processor));
             _commandStorage = new CommandStorage();
-            _logger = logger;
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        /// <summary>Starts listening for incoming commands</summary>
         public void Start()
         {
             if (_isRunning) return;
@@ -41,11 +41,9 @@ namespace SPP.WorkerNodeApp.Communication
             _isRunning = true;
             Console.WriteLine($"Command listener started on {_baseUrl}");
 
-            // Start listening for requests in a background task
             Task.Run(ProcessRequestsAsync);
         }
 
-        /// <summary>Stops listening for commands</summary>
         public void Stop()
         {
             _isRunning = false;
@@ -53,7 +51,6 @@ namespace SPP.WorkerNodeApp.Communication
             Console.WriteLine("Command listener stopped");
         }
 
-        /// <summary>Main loop for processing incoming HTTP requests</summary>
         private async Task ProcessRequestsAsync()
         {
             while (_isRunning)
@@ -71,13 +68,12 @@ namespace SPP.WorkerNodeApp.Communication
                 {
                     if (_isRunning)
                     {
-                        Console.WriteLine($"Error processing request: {ex.Message}");
+                        _logger.LogError(ex, "Error processing request");
                     }
                 }
             }
         }
 
-        /// <summary>Handles an individual HTTP request by routing it to the appropriate handler</summary>
         private async Task HandleRequestAsync(HttpListenerContext context)
         {
             try
@@ -96,7 +92,7 @@ namespace SPP.WorkerNodeApp.Communication
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error handling request: {ex.Message}");
+                _logger.LogError(ex, "Error handling request");
                 SendErrorResponse(context.Response, HttpStatusCode.InternalServerError, ex.Message);
             }
             finally
@@ -120,6 +116,7 @@ namespace SPP.WorkerNodeApp.Communication
 
                 if (command == null)
                 {
+                    _logger.LogWarning("Deserialized command is null.");
                     SendErrorResponse(response, HttpStatusCode.BadRequest, "Invalid command");
                     return;
                 }
@@ -131,7 +128,7 @@ namespace SPP.WorkerNodeApp.Communication
 
                 _commandStorage.AddCommand(command);
 
-                var commandResult = command.Type.ToLower() switch
+                var commandResult = command.Type?.ToLower() switch
                 {
                     "status" => await HandleStatusCommand(command),
                     "cancel" => await HandleCancelCommand(command),
@@ -154,8 +151,9 @@ namespace SPP.WorkerNodeApp.Communication
 
                 SendJsonResponse(response, HttpStatusCode.OK, commandResult);
             }
-            catch (JsonException)
+            catch (JsonException jsonEx)
             {
+                _logger.LogWarning(jsonEx, "Invalid JSON received");
                 SendErrorResponse(response, HttpStatusCode.BadRequest, "Invalid JSON in request");
             }
             catch (Exception ex)
@@ -198,8 +196,20 @@ namespace SPP.WorkerNodeApp.Communication
 
         private async Task<UnifiedCommandResponse> HandleStartProcessingCommand(UnifiedCommand command)
         {
+            if (string.IsNullOrWhiteSpace(command.Payload?.ToString()))
+            {
+                _logger.LogWarning("Received 'startprocessing' command with null or empty payload.");
+                return new UnifiedCommandResponse
+                {
+                    Success = false,
+                    Status = "Payload is empty",
+                    CommandId = command.CommandId
+                };
+            }
+
             _commandStorage.AddCommand(command);
             await _processor.ProcessCommandAsync(command.Type, command.Payload);
+
             return new UnifiedCommandResponse
             {
                 Success = true,
