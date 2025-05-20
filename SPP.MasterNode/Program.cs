@@ -16,6 +16,8 @@ builder.Services.AddControllers();
 // Register custom service to store and manage worker node registrations
 builder.Services.AddSingleton<WorkerRegistryService>();
 
+builder.Services.AddHttpClient();
+
 // Configure database context using MySQL
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseMySql(
