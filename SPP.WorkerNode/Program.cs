@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using WorkerNodeApp.Communication;
-using WorkerNodeApp.Services;
+using SPP.WorkerNode.Communication;
+using SPP.WorkerNode.Services;
 
-namespace WorkerNodeApp
+namespace SPP.WorkerNode
 {
     /// <summary>
     /// Entry point for the Worker Node application.
