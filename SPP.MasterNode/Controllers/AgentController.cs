@@ -31,6 +31,7 @@ namespace CentralApp.Controllers
             }
             return Ok(agent);
         }
+        
 
         // Validate the AgentId format and region code
         [HttpPost("validate/{agentId}")]

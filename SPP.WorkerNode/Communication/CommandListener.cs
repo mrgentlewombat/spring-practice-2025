@@ -9,9 +9,10 @@ using SPP.WorkerNode.Services;
 
 namespace SPP.WorkerNode.Communication
 {
-
-    /// listens for HTTP commands from CentralApp and processes them
-    /// this class allows WorkerNodeApp to receive HTTP requests    
+    /// <summary>
+    /// Listens for HTTP commands from CentralApp and processes them.
+    /// This class allows WorkerNodeApp to receive HTTP requests.
+    /// </summary>
     public class CommandListener : IDisposable
     {
         private readonly HttpListener _listener;
@@ -26,13 +27,11 @@ namespace SPP.WorkerNode.Communication
             _baseUrl = $"http://{baseUrl.TrimEnd('/')}:{port}/";
             _listener = new HttpListener();
             _listener.Prefixes.Add($"{_baseUrl}api/");
-            _processor = processor;
+            _processor = processor ?? throw new ArgumentNullException(nameof(processor));
             _commandStorage = new CommandStorage();
-            _logger = logger;
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-
-        /// starts listening for incoming commands
         public void Start()
         {
             if (_isRunning) return;
@@ -40,12 +39,11 @@ namespace SPP.WorkerNode.Communication
             _listener.Start();
             _isRunning = true;
             Console.WriteLine($"Command listener started on {_baseUrl}");
+            Console.WriteLine($"Command listener started on {_baseUrl}");
 
-            // start listening for requests in a background task
             Task.Run(ProcessRequestsAsync);
         }
 
-        /// stops listening for commands
         public void Stop()
         {
             _isRunning = false;
@@ -53,45 +51,35 @@ namespace SPP.WorkerNode.Communication
             Console.WriteLine("Command listener stopped");
         }
 
-
-        /// main loop for processing incoming HTTP requests
         private async Task ProcessRequestsAsync()
         {
             while (_isRunning)
             {
                 try
                 {
-
                     var context = await _listener.GetContextAsync();
-
-                    // process the request in another task to keep the listener responsive
                     _ = Task.Run(() => HandleRequestAsync(context));
                 }
                 catch (HttpListenerException)
                 {
-
                     break;
                 }
                 catch (Exception ex)
                 {
                     if (_isRunning)
                     {
-                        Console.WriteLine($"Error processing request: {ex.Message}");
+                        _logger.LogError(ex, "Error processing request");
                     }
                 }
             }
         }
 
-
-        /// handles an individual HTTP request by routing it to the appropriate handler
         private async Task HandleRequestAsync(HttpListenerContext context)
         {
             try
             {
                 var request = context.Request;
                 var response = context.Response;
-
-
                 response.ContentType = "application/json";
 
                 if (request.HttpMethod != "POST")
@@ -104,15 +92,16 @@ namespace SPP.WorkerNode.Communication
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error handling request: {ex.Message}");
+                _logger.LogError(ex, "Error handling request");
                 SendErrorResponse(context.Response, HttpStatusCode.InternalServerError, ex.Message);
             }
             finally
             {
-
                 context.Response.Close();
             }
-        }        private async Task HandleUnifiedCommandAsync(HttpListenerRequest request, HttpListenerResponse response)
+        }
+
+        private async Task HandleUnifiedCommandAsync(HttpListenerRequest request, HttpListenerResponse response)
         {
             string requestBody;
             using (var reader = new StreamReader(request.InputStream, request.ContentEncoding))
@@ -127,6 +116,7 @@ namespace SPP.WorkerNode.Communication
 
                 if (command == null)
                 {
+                    _logger.LogWarning("Deserialized command is null.");
                     SendErrorResponse(response, HttpStatusCode.BadRequest, "Invalid command");
                     return;
                 }
@@ -136,32 +126,34 @@ namespace SPP.WorkerNode.Communication
                     command.CommandId = Guid.NewGuid().ToString();
                 }
 
-                _commandStorage.AddCommand(command);                var commandResult = command.Type.ToLower() switch
+                _commandStorage.AddCommand(command);
+
+                var commandResult = command.Type?.ToLower() switch
                 {
                     "status" => await HandleStatusCommand(command),
                     "cancel" => await HandleCancelCommand(command),
                     "startprocessing" => await HandleStartProcessingCommand(command),
                     "sendstatistics" => await HandleSendStatisticsCommand(command),
                     "lockfiles" => await HandleLockFilesCommand(command),
-                    _ => new UnifiedCommandResponse 
-                    { 
-                        Success = false, 
-                        Status = "Unknown command", 
-                        CommandId = command.CommandId 
+                    _ => new UnifiedCommandResponse
+                    {
+                        Success = false,
+                        Status = "Unknown command",
+                        CommandId = command.CommandId
                     }
                 };
 
-                // Update command status based on result
                 if (_commandStorage.TryGetCommand(command.CommandId, out var cmdInfo))
                 {
-                    _commandStorage.UpdateStatus(command.CommandId, 
+                    _commandStorage.UpdateStatus(command.CommandId,
                         commandResult.Success ? CommandStorage.CommandStatus.Completed : CommandStorage.CommandStatus.Failed);
                 }
 
                 SendJsonResponse(response, HttpStatusCode.OK, commandResult);
             }
-            catch (JsonException)
+            catch (JsonException jsonEx)
             {
+                _logger.LogWarning(jsonEx, "Invalid JSON received");
                 SendErrorResponse(response, HttpStatusCode.BadRequest, "Invalid JSON in request");
             }
             catch (Exception ex)
@@ -204,8 +196,20 @@ namespace SPP.WorkerNode.Communication
 
         private async Task<UnifiedCommandResponse> HandleStartProcessingCommand(UnifiedCommand command)
         {
+            if (string.IsNullOrWhiteSpace(command.Payload?.ToString()))
+            {
+                _logger.LogWarning("Received 'startprocessing' command with null or empty payload.");
+                return new UnifiedCommandResponse
+                {
+                    Success = false,
+                    Status = "Payload is empty",
+                    CommandId = command.CommandId
+                };
+            }
+
             _commandStorage.AddCommand(command);
             await _processor.ProcessCommandAsync(command.Type, command.Payload);
+
             return new UnifiedCommandResponse
             {
                 Success = true,
@@ -216,7 +220,6 @@ namespace SPP.WorkerNode.Communication
 
         private Task<UnifiedCommandResponse> HandleSendStatisticsCommand(UnifiedCommand command)
         {
-            // Implementation for sending statistics
             return Task.FromResult(new UnifiedCommandResponse
             {
                 Success = true,
@@ -227,7 +230,6 @@ namespace SPP.WorkerNode.Communication
 
         private Task<UnifiedCommandResponse> HandleLockFilesCommand(UnifiedCommand command)
         {
-            // Implementation for locking files
             return Task.FromResult(new UnifiedCommandResponse
             {
                 Success = true,
@@ -240,32 +242,26 @@ namespace SPP.WorkerNode.Communication
         {
             response.StatusCode = (int)statusCode;
 
-
             var json = JsonSerializer.Serialize(data,
                 new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
             var buffer = Encoding.UTF8.GetBytes(json);
-
 
             response.ContentLength64 = buffer.Length;
             response.OutputStream.Write(buffer, 0, buffer.Length);
         }
 
-
-        /// sends an error response with the specified status code and message
         private void SendErrorResponse(HttpListenerResponse response, HttpStatusCode statusCode, string message)
         {
             response.StatusCode = (int)statusCode;
-
 
             var error = new { error = true, message };
             var json = JsonSerializer.Serialize(error);
             var buffer = Encoding.UTF8.GetBytes(json);
 
-
             response.ContentLength64 = buffer.Length;
             response.OutputStream.Write(buffer, 0, buffer.Length);
         }
-        /// disposes resources used by the listener
+
         public void Dispose()
         {
             Stop();

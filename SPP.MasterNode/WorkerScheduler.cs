@@ -19,50 +19,35 @@ public class WorkerScheduler : BackgroundService
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+{
+    await Task.Delay(TimeSpan.FromSeconds(5), stoppingToken);
+
+    while (!stoppingToken.IsCancellationRequested)
     {
-        //we wait a bit, so the worker will be for sure available
-        await Task.Delay(TimeSpan.FromSeconds(5), stoppingToken);
+        Console.WriteLine("CentralApp: Scheduler Tick...");
 
-        while (!stoppingToken.IsCancellationRequested)
+        try
         {
-            Console.WriteLine("CentralApp: Scheduler Tick...");
-
-            try
+            var command = new UnifiedCommand
             {
-                //check if worker node still active
-                var pingResponse = await _communication.PostAsync<CommandResponse>(
-                    $"{_workerBaseUrl}/api/command",
-                    new CommandRequest { Command = "ping" }
-                );
-                Console.WriteLine($"Worker Ping Response: {pingResponse?.Message}");
+                Type = "startprocessing",
+                Payload = "read-file"
+            };
 
-                //check the exact status of the worker node
-                var statusResponse = await _communication.GetAsync<StatusResponse>(
-                    $"{_workerBaseUrl}/api/status"
-                );
-                Console.WriteLine($"Worker Status: {statusResponse?.Status}, Progress: {statusResponse?.Progress}%");
+            var response = await _communication.PostAsync<UnifiedCommandResponse>(
+                _workerBaseUrl, // ex: http://localhost:5001/api/agent/process
+                command
+            );
 
-                //launch periodic work process on the worker node
-                if (statusResponse?.Status == "Idle")
-                {
-                    var workResponse = await _communication.PostAsync<CommandResponse>(
-                        $"{_workerBaseUrl}/api/command",
-                        new CommandRequest 
-                        { 
-                            Command = "start",
-                            Data = new { timestamp = DateTime.UtcNow }
-                        }
-                    );
-                    Console.WriteLine($"Work Process Response: {workResponse?.Message}");
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"[ERROR] Failed to communicate with worker node: {ex.Message}");
-            }
-
-            // Wait before next check
-            await Task.Delay(TimeSpan.FromSeconds(10), stoppingToken);
+            Console.WriteLine($"Worker response: Success={response?.Success}, Status={response?.Status}");
         }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"[ERROR] Failed to communicate with worker node: {ex.Message}");
+        }
+
+        await Task.Delay(TimeSpan.FromSeconds(10), stoppingToken);
     }
+}
+
 }
